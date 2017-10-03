@@ -1,9 +1,17 @@
-import { SET_GAMES } from '../actions/actions';
+import { SET_GAMES, ADD_GAME } from '../actions/actions';
 
 export default function games(state = [], action = {}) {
+
   switch(action.type) {
-    default: return state;
+    case ADD_GAME:
+      return [
+        ...state,
+        action.game
+      ];
     case SET_GAMES:
       return action.games;
+
+    default: return state;
   }
+
 };

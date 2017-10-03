@@ -23,7 +23,19 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
   });
 
   app.post('/api/games', (req, res) => {
-    console.log(req.body);
+    const { errors, isValid } = validate(req.body);
+    if (isValid) {
+      const { title, cover } = req.body;
+      db.collection('games').insert({title, cover}, (err, result) => {
+        if(err) {
+          res.status(500).json({ errors: { global: "Something went wrong"}});
+        } else {
+          res.json({ game: result.ops[0] });
+        }
+      })
+    } else {
+      res.status(400).json({errors});
+    }
   });
 
   app.use((req, res) => {
